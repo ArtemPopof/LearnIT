@@ -1,0 +1,62 @@
+.div-center {
+    display: table;
+    margin: 0 auto;
+}
+
+.div-center img {
+    width: 10rem;
+}
+
+.buttons-group {
+    display: flex;
+}
+
+.buttons-group button:first-child {
+    margin-right: 8px;
+}
+
+a, div, img, p, button {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.question_card {
+    border: 3px solid rgb(179, 158, 75);
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 500px;
+}
+
+.question_text {
+    font-size: 24px;
+    font-weight: 900;
+    font-style: italic;
+    color: rgb(14, 14, 58);
+}
+
+.answer_card {
+    text-align: left;
+    font-size: 22px;
+    background-color: rgb(255, 248, 220);
+    border: 1px solid rgb(179, 158, 75);
+    display: flex;
+}
+
+.answer_card:hover {
+    background-color: rgb(255, 255, 255);
+}
+
+.answer_container {
+    padding: 10px 10px;
+    display: flex;
+}
+
+.answer_number {
+    margin-right: 10px;
+    font-weight: 200;
+    color: rgb(150, 150, 150);
+}
