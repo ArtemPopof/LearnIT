@@ -1,15 +1,29 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import Question from '../../components/Question'
 
 import {closePopout, goBack, openModal, openPopout, setPage} from '../../store/router/actions';
-
+import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
+
+const API_URL = "http://localhost:8080"
 
 class HomePanelBase extends React.Component {
 
     state = {
-        showImg: false
+        showImg: false,
+        question: []
     };
+
+    componentDidMount() {
+        this.loadRandomWord()
+    }
+
+    loadRandomWord() {
+        axios.get(API_URL + "/question/random").then(res => this.setState({
+            question: res.data
+        }))
+    }
 
     showImg = () => {
         this.setState({showImg: true});
@@ -35,51 +49,38 @@ class HomePanelBase extends React.Component {
         );
     }
 
+    onAnswerResult(isCorrect) {
+        if (isCorrect) {
+            alert("Nice Job!")
+        } else {
+            alert("Oh shit, wrong!")
+        }
+
+        this.loadRandomWord()
+    }
+
     render() {
-        const {id, setPage, withoutEpic} = this.props;
+        const {id, setPage, withoutEpic} = this.props
+        const content = this.state.question.text == null ? this.getLoadingContent() : this.getQuestionComponent()
 
         return (
             <Panel id={id}>
                 <PanelHeader>Тест уровня Java Juniour</PanelHeader>
                 <Group>
                     <Div className="quiz_container">
-                        <div className="question_card">
-                            <p className="question_text">К чему можно применить модификатор final?</p>
-                            <div className="answer_card">
-                                <a className="answer_container">
-                                    <a className="answer_number">1.</a>
-                                    <a className="answer_text">К классу</a>
-                                </a>
-                            </div>
-                            <div className="answer_card">
-                                <a className="answer_container">
-                                    <a className="answer_number">2.</a>
-                                    <a className="answer_text">К методу</a>
-                                </a>
-                            </div>
-                            <div className="answer_card">
-                                <a className="answer_container">
-                                    <a className="answer_number">3.</a>
-                                    <a className="answer_text">К полю класса</a>
-                                </a>
-                            </div>
-                            <div className="answer_card">
-                                <a className="answer_container">
-                                    <a className="answer_number">4.</a>
-                                    <a className="answer_text">К аргументам метода</a>
-                                </a>
-                            </div>
-                            <div className="answer_card">
-                                <a className="answer_container">
-                                    <a className="answer_number">5.</a>
-                                    <a className="answer_text">Ко всему вышеперечисленному</a>
-                                </a>
-                            </div>
-                        </div> 
+                        {content}
                     </Div>
                 </Group>
             </Panel>
         );
+    }
+
+    getQuestionComponent() {
+        return <Question question={this.state.question} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
+    }
+
+    getLoadingContent() {
+        return <div className="loadingContainer"><h1>Loading</h1></div>
     }
 
 }

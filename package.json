@@ -18,9 +18,10 @@
   },
   "dependencies": {
     "@vkontakte/icons": "^1.16.1",
+    "@vkontakte/vk-bridge": "2.1.6",
     "@vkontakte/vk-connect": "^1.8.7",
     "@vkontakte/vkui": "^3.6.1",
-    "@vkontakte/vk-bridge": "2.1.6",
+    "axios": "^0.19.2",
     "babel-eslint": "^9.0.0",
     "chalk": "^2.4.2",
     "core-js": "^2.6.11",
