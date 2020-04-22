@@ -12,7 +12,10 @@ class HomePanelBase extends React.Component {
 
     state = {
         showImg: false,
-        question: []
+        question: [],
+        currentQuestionIndex: 0,
+        questionCount: 10,
+        correctAnswers: 0
     };
 
     componentDidMount() {
@@ -20,9 +23,19 @@ class HomePanelBase extends React.Component {
     }
 
     loadRandomWord() {
+        if (this.state.currentQuestionIndex == this.state.questionCount) {
+            this.testIsOver()
+            return
+        }
+
         axios.get(API_URL + "/question/random").then(res => this.setState({
-            question: res.data
+            question: res.data,
+            currentQuestionIndex: ++this.state.currentQuestionIndex
         }))
+    }
+
+    testIsOver() {
+        this.setState({testIsOver: true})
     }
 
     showImg = () => {
@@ -52,6 +65,9 @@ class HomePanelBase extends React.Component {
     onAnswerResult(isCorrect) {
         if (isCorrect) {
             alert("Nice Job!")
+            this.setState({
+                correctAnswers: ++this.state.correctAnswers
+            })
         } else {
             alert("Oh shit, wrong!")
         }
@@ -61,7 +77,8 @@ class HomePanelBase extends React.Component {
 
     render() {
         const {id, setPage, withoutEpic} = this.props
-        const content = this.state.question.text == null ? this.getLoadingContent() : this.getQuestionComponent()
+        const content = this.state.testIsOver ? this.getSummaryContent() 
+        : this.state.question.text == null ? this.getLoadingContent() : this.getQuestionComponent()
 
         return (
             <Panel id={id}>
@@ -75,9 +92,27 @@ class HomePanelBase extends React.Component {
         );
     }
 
-    getQuestionComponent() {
-        return <Question question={this.state.question} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
+    getSummaryContent() {
+        const correctPercentage = Math.round((this.state.correctAnswers * 1.0 / this.state.questionCount * 1.0) * 100);
+        return (
+            <div className="test_summary_container">
+                <h1>Тест завершен</h1>
+                <p>Результат: {correctPercentage} %</p>
+                <p>Количество верных ответов: {this.state.correctAnswers}</p>
+                <br/>
+                <p>Отличная работа!</p>
+            </div>
+        )
     }
+
+    getQuestionComponent() {
+        return (
+            <div>
+                <div className="current_question"><a>{this.state.currentQuestionIndex} из {this.state.questionCount}</a></div>
+                <Question question={this.state.question} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
+            </div>
+        );
+     }
 
     getLoadingContent() {
         return <div className="loadingContainer"><h1>Loading</h1></div>

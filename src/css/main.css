@@ -74,3 +74,17 @@ a, div, img, p, button, h1 {
     color: rgb(150, 150, 150);
     font-size: 55px;
 }
+
+.current_question {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+.test_summary_container {
+    text-align: center;
+    margin: 0 auto;
+    width: 70%;
+    font-size: 30px;
+    border: 6px solid rgb(179, 158, 75);
+}
