@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 
 import {goBack, openPopout, closePopout, openModal} from "../../store/router/actions";
-import * as VK from '../../services/VK';
 
 import {renderGroupsList} from '../../services/renderers';
 
@@ -29,7 +28,6 @@ class HomePanelGroups extends React.Component {
     }
 
     getAuthToken() {
-        this.props.dispatch(VK.getAuthToken(['groups']));
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -63,7 +61,7 @@ class HomePanelGroups extends React.Component {
             return;
         }
 
-        let groups = await VK.groupsGet();
+        let groups = null
 
         let adminedGroups = groups.items.filter(function (item) {
             return item.is_admin === 1;

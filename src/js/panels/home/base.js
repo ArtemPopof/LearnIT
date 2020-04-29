@@ -6,36 +6,21 @@ import {closePopout, goBack, openModal, openPopout, setPage} from '../../store/r
 import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
 
-const API_URL = "http://localhost:8080"
+const API_URL = "http://localhost:8081"
 
 class HomePanelBase extends React.Component {
 
     state = {
         showImg: false,
-        question: [],
+        questions: [],
         currentQuestionIndex: 0,
         questionCount: 10,
-        correctAnswers: 0
+        correctAnswers: 0,
+        currentState: "menu"
     };
 
-    componentDidMount() {
-        this.loadRandomWord()
-    }
-
-    loadRandomWord() {
-        if (this.state.currentQuestionIndex == this.state.questionCount) {
-            this.testIsOver()
-            return
-        }
-
-        axios.get(API_URL + "/question/random").then(res => this.setState({
-            question: res.data,
-            currentQuestionIndex: ++this.state.currentQuestionIndex
-        }))
-    }
-
     testIsOver() {
-        this.setState({testIsOver: true})
+        this.setState({currentState: "testOver"})
     }
 
     showImg = () => {
@@ -72,17 +57,41 @@ class HomePanelBase extends React.Component {
             alert("Oh shit, wrong!")
         }
 
-        this.loadRandomWord()
+        if (this.state.currentQuestionIndex + 1 > this.state.questions.length) {
+            this.setState({
+                currentState: "testOver"
+            })
+        } else {
+            this.setState({
+                currentQuestionIndex: this.state.currentQuestionIndex + 1
+            })
+        }
+
+    }
+
+    getCurrentContent(state) {
+        console.log(this.state.question)
+        switch (state) {
+            case "menu":
+                return this.getMenuContent()
+            case "performingTest":
+                if (this.state.questions.length == 0) {
+                    return this.getLoadingContent()
+                } else {
+                    return this.getQuestionComponent()
+                }
+            case "testOver":
+                return this.getSummaryContent()
+        }
     }
 
     render() {
         const {id, setPage, withoutEpic} = this.props
-        const content = this.state.testIsOver ? this.getSummaryContent() 
-        : this.state.question.text == null ? this.getLoadingContent() : this.getQuestionComponent()
+        const content = this.getCurrentContent(this.state.currentState)
 
         return (
             <Panel id={id}>
-                <PanelHeader>Тест уровня Java Juniour</PanelHeader>
+                <PanelHeader>LearnIT <small className="beta">beta</small></PanelHeader>
                 <Group>
                     <Div className="quiz_container">
                         {content}
@@ -90,6 +99,35 @@ class HomePanelBase extends React.Component {
                 </Group>
             </Panel>
         );
+    }
+
+    getMenuContent() {
+        return (
+            <div className="menu_container">
+                <h1 className="menu_title">Уровень тестирования</h1>
+                <div className="menu_item" onClick={() => this.startTest("junior")}>Начинающий (Juniour)</div>
+                <div className="menu_item" onClick={() => this.startTest("middle")}>Средний (Middle)</div>
+                <div className="menu_item" onClick={() => this.startTest("senior")}>Продвинутый (Senior)</div>
+            </div>
+        )
+    }
+
+    startTest(level) {        
+        this.setState({
+            currentState: "performingTest",
+            currentQuestionIndex: 1,
+            questions: [],
+            level: level,
+        })
+
+        this.loadRandomQuestions(level)
+    }
+
+    loadRandomQuestions(level) {
+        axios.get(API_URL + "/question/random?level=" + level + "&" + "count=10").then(res => this.setState({
+            questions: res.data,
+            questionCount: res.data.length,
+        }))
     }
 
     getSummaryContent() {
@@ -106,10 +144,11 @@ class HomePanelBase extends React.Component {
     }
 
     getQuestionComponent() {
+        console.log(this.state)
         return (
             <div>
                 <div className="current_question"><a>{this.state.currentQuestionIndex} из {this.state.questionCount}</a></div>
-                <Question question={this.state.question} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
+                <Question question={this.state.questions[this.state.currentQuestionIndex - 1]} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
             </div>
         );
      }

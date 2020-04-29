@@ -54,7 +54,7 @@ a, div, img, p, button, h1 {
     background-color: crimson;
 }
 
-.answer_card:hover {
+.answer_card:hover, .menu_item:hover {
     background-color: rgb(255, 255, 255);
 }
 
@@ -87,4 +87,24 @@ a, div, img, p, button, h1 {
     width: 70%;
     font-size: 30px;
     border: 6px solid rgb(179, 158, 75);
+}
+
+.menu_container {
+    text-align: center;
+    margin: 0 auto;
+    width: 70%;
+    font-size: 30px;
+    border: 6px solid rgb(179, 158, 75);
+}
+
+.menu_item {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color:  rgb(255, 204, 0);
+    border-top: 3px solid rgb(27, 22, 0)
+}
+
+.beta {
+    color: red;
+    font-weight: 400;
 }

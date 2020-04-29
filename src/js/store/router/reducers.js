@@ -8,7 +8,6 @@ import {
     SET_STORY
 } from './actionTypes';
 
-import * as VK from "../../services/VK";
 import {smoothScrollToTop} from "../../services/_functions";
 
 const initialState = {
@@ -51,7 +50,6 @@ export const routerReducer = (state = initialState, action) => {
             }
 
             if (panelsHistory.length > 1) {
-                VK.swipeBackOn();
             }
 
             return {
@@ -208,11 +206,9 @@ export const routerReducer = (state = initialState, action) => {
                     setPanel = panelsHistoryNew[0];
                 }
             } else {
-                VK.closeApp();
             }
 
             if (panelsHistory.length === 1) {
-                VK.swipeBackOff();
             }
 
             return {
