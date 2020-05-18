@@ -6,9 +6,11 @@ import {closePopout, goBack, openModal, openPopout, setPage} from '../../store/r
 import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
 
-const API_URL = "http://localhost:8081"
+const API_URL = "https://server.abbysoft.org:433"
 
 class HomePanelBase extends React.Component {
+
+    nextButton = null;
 
     state = {
         showImg: false,
@@ -16,7 +18,9 @@ class HomePanelBase extends React.Component {
         currentQuestionIndex: 0,
         questionCount: 10,
         correctAnswers: 0,
-        currentState: "menu"
+        currentState: "menu",
+        time: 10,
+        answered: false,
     };
 
     testIsOver() {
@@ -49,24 +53,31 @@ class HomePanelBase extends React.Component {
 
     onAnswerResult(isCorrect) {
         if (isCorrect) {
-            alert("Nice Job!")
             this.setState({
-                correctAnswers: ++this.state.correctAnswers
+                correctAnswers: ++this.state.correctAnswers,
+                answered: true
             })
         } else {
-            alert("Oh shit, wrong!")
+            this.setState({
+                answered: true
+            })
         }
 
+        this.nextButton.scrollIntoView({behavior: "smooth"})
+    }
+
+    showNextQuestion() {
         if (this.state.currentQuestionIndex + 1 > this.state.questions.length) {
             this.setState({
-                currentState: "testOver"
+                currentState: "testOver",
+                answered: false
             })
         } else {
             this.setState({
-                currentQuestionIndex: this.state.currentQuestionIndex + 1
+                currentQuestionIndex: this.state.currentQuestionIndex + 1,
+                answered: false
             })
         }
-
     }
 
     getCurrentContent(state) {
@@ -93,7 +104,7 @@ class HomePanelBase extends React.Component {
             <Panel id={id}>
                 <PanelHeader>LearnIT <small className="beta">beta</small></PanelHeader>
                 <Group>
-                    <Div className="quiz_container">
+                    <Div alignY="center">
                         {content}
                     </Div>
                 </Group>
@@ -103,9 +114,9 @@ class HomePanelBase extends React.Component {
 
     getMenuContent() {
         return (
-            <div className="menu_container">
-                <h1 className="menu_title">Уровень тестирования</h1>
-                <div className="menu_item" onClick={() => this.startTest("junior")}>Начинающий (Juniour)</div>
+            <div className="panel panel_list">
+                <h1 className="panel_title">Уровень тестирования</h1>
+                <div className="menu_item" onClick={() => this.startTest("junior")}>Начинающий (Junior)</div>
                 <div className="menu_item" onClick={() => this.startTest("middle")}>Средний (Middle)</div>
                 <div className="menu_item" onClick={() => this.startTest("senior")}>Продвинутый (Senior)</div>
             </div>
@@ -118,6 +129,7 @@ class HomePanelBase extends React.Component {
             currentQuestionIndex: 1,
             questions: [],
             level: level,
+            correctAnswers: 0
         })
 
         this.loadRandomQuestions(level)
@@ -131,24 +143,34 @@ class HomePanelBase extends React.Component {
     }
 
     getSummaryContent() {
-        const correctPercentage = Math.round((this.state.correctAnswers * 1.0 / this.state.questionCount * 1.0) * 100);
+        const correctPercentage = Math.round((this.state.correctAnswers * 1.0 / this.state.questions.length * 1.0) * 100);
         return (
-            <div className="test_summary_container">
-                <h1>Тест завершен</h1>
-                <p>Результат: {correctPercentage} %</p>
-                <p>Количество верных ответов: {this.state.correctAnswers}</p>
-                <br/>
-                <p>Отличная работа!</p>
+            <div>
+                <div className="panel_lighter panel">
+                    <h1>Тест завершен</h1>
+                    <p>Результат: {correctPercentage} %</p>
+                    <p>Количество верных ответов: {this.state.correctAnswers}</p>
+                    <br/>
+                    <p>Отличная работа!</p>
+                </div>
+                <div className="button" onClick={() => this.setState({currentState: "menu"})}>Пройти снова</div>
             </div>
         )
     }
 
     getQuestionComponent() {
-        console.log(this.state)
         return (
             <div>
-                <div className="current_question"><a>{this.state.currentQuestionIndex} из {this.state.questionCount}</a></div>
+                <div>
+                    <div className="current_question">
+                        <div className="time_circle">{this.state.time}</div>
+                        <a className="center question_num">{this.state.currentQuestionIndex} из {this.state.questionCount}</a>
+                    </div>
+                </div>
                 <Question question={this.state.questions[this.state.currentQuestionIndex - 1]} onAnswerResult={(answer) => this.onAnswerResult(answer)}></Question>
+                <div className="button" style={{display: this.state.answered ? 'block' : 'none' }}
+                 ref={(button) => this.nextButton = button}
+                 onClick={() => this.showNextQuestion()}>Следующий</div>
             </div>
         );
      }

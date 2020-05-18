@@ -86,10 +86,6 @@ class App extends React.Component {
                             onClick={() => setStory('home', 'base')}
                             selected={activeStory === 'home'}
                         ><Icon28Newsfeed/></TabbarItem>
-                        <TabbarItem
-                            onClick={() => setStory('more', 'callmodal')}
-                            selected={activeStory === 'more'}
-                        ><Icon28More/></TabbarItem>
                     </Tabbar>
                 }>
                     <Root id="home" activeView={activeView} popout={popout}>

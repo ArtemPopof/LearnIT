@@ -3,17 +3,31 @@ import React from 'react';
 class Question extends React.Component {
 
     state = {
-        givenAnswerId: null
+        givenAnswerId: null,
+        lastQuestion: null
     }
 
     render() {
         const answers = this.props.question.answers.split(';')
+        if (this.state.lastQuestion != this.props.question.id) {
+            this.prepareForNewQuestion()
+        }
 
         return (
-            <div className="question_card">
-            <p className="question_text">{this.props.question.text}</p>
-            {answers.map((answer, index) => this.renderAnswer(answer, index))}
-            </div>)
+            <div>
+                <div className="panel panel_list">
+                    <p className="panel_title">{this.props.question.text}</p>
+                    {answers.map((answer, index) => this.renderAnswer(answer, index))}
+                </div>
+            </div>);
+    }
+
+    prepareForNewQuestion() {
+        this.state = ({
+            givenAnswerId: null,
+            correctAnswered: null,
+            lastQuestion: this.props.question.id
+        })
     }
 
     renderAnswer(answer, index) {
@@ -37,16 +51,13 @@ class Question extends React.Component {
 
         this.setState({
             givenAnswerId: index,
-            correctAnswered: index == this.props.question.rightAnswer
+            correctAnswered: index == this.props.question.rightAnswer,
+            lastQuestion: this.props.question.id
         })
 
         await new Promise(resolve => setTimeout(resolve, 100))
 
         this.props.onAnswerResult(this.state.correctAnswered)
-
-        this.setState({
-            givenAnswerId: null
-        })
     }
 }
 
