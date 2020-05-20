@@ -136,7 +136,7 @@ class HomePanelBase extends React.Component {
     }
 
     loadRandomQuestions(level) {
-        axios.get(API_URL + "/question/random?level=" + level + "&" + "count=10").then(res => this.setState({
+        axios.get(API_URL + "/question/random?level=" + level + "&" + "count=20").then(res => this.setState({
             questions: res.data,
             questionCount: res.data.length,
         }))
@@ -146,16 +146,69 @@ class HomePanelBase extends React.Component {
         const correctPercentage = Math.round((this.state.correctAnswers * 1.0 / this.state.questions.length * 1.0) * 100);
         return (
             <div>
+                <div className="panel_lighter panel poll_card" style={{marginBottom: "10px"}}>
+                    <p>Следите за новостями в группе VK</p>
+                    <div className="center-vertically">
+                        <a style={{marginRight: "10px"}} href="https://vk.com/javatests">Перейти в группу</a>
+                        <img width="50" src="https://leonardo.osnova.io/7e0ec5a0-1e56-2e90-de73-6c402276900d/-/resize/900"></img>
+                    </div>
+                </div>
                 <div className="panel_lighter panel">
                     <h1>Тест завершен</h1>
                     <p>Результат: {correctPercentage} %</p>
                     <p>Количество верных ответов: {this.state.correctAnswers}</p>
-                    <br/>
-                    <p>Отличная работа!</p>
+                </div>
+                <div className="panel_lighter panel poll_card" style={{display: this.state.hidePoll ? 'none' : 'block' }}>
+                        <div>
+                            <p>Что можно было бы улучшить в приложении?</p>
+                            <table className="answer_container">
+                                {this.renderPollOption(0, "Больше вопросов")}
+                                {this.renderPollOption(1, "Результат по областям Java")}
+                                {this.renderPollOption(2, "Тестовые задания с оценкой")}
+                                <td className="answer_card dark" style={{display: this.state.customPollAnswer ? 'none' : 'block' }} onClick={() => this.customPollAnswer()}>Другое</td>
+                                <div className="custom_answer" style={{display: this.state.customPollAnswer ? 'block' : 'none' }}>
+                                    <input type="text" classname="textField"
+                                    placeholder="Отзывы и пожелания" onChange={(event) => this.setState({customPollAnswer: event.target.value})}/>
+                                    <div className="button button_field" onClick={() => this.customPollAnswerReceived()}>Отправить</div>
+                                </div>
+                            </table>
+                        </div>
                 </div>
                 <div className="button" onClick={() => this.setState({currentState: "menu"})}>Пройти снова</div>
             </div>
         )
+    }
+
+    renderPollOption(index, text) {
+        var style = {
+        display: this.state.customPollAnswer ? 'none' : 'block'}
+
+        if (this.state.pollAnswer == index) {
+            style = {
+                display: this.state.customPollAnswer ? 'none' : 'block',
+                "background-color": this.state.pollAnswer == index ? "#d9ec8d" : "rgb(243, 234, 196)"} 
+        }
+
+        return (
+            <td className="answer_card dark" style={style} onClick={() => this.onPollAnswered(index)}>{text}</td>
+        );
+    }
+
+    customPollAnswerReceived() {
+        this.onPollAnswered(this.state.customPollAnswer)
+        this.setState({pollAnswered: true, hidePoll: true})
+        alert("Спасибо, Вы нам очень помогли!")
+    }
+
+    // extract API CALLS to a class
+    onPollAnswered(answer) {
+        console.log("poll answer " + answer)
+        this.setState({pollAnswer: answer})
+        axios.post(API_URL + "/question/answer?question=" + 1000 + "&" + "answer=" + answer).catch((error) => console.error(error))
+    }
+
+    customPollAnswer() {
+        this.setState({customPollAnswer: true})
     }
 
     getQuestionComponent() {

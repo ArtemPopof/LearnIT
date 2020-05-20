@@ -113,10 +113,10 @@ a, div, img, p, button, h1 {
 .panel {
     text-align: center;
     margin: 0 auto;
-    padding: 30px 0;
+    padding: 10px;
     min-width: 300px;
     width: 90%;
-    font-size: 30px;
+    font-size: 25px;
     background-color: rgb(245, 227, 157);
     color: rgb(99, 88, 44);
     border: 2px solid rgb(179, 158, 75);
@@ -133,6 +133,8 @@ a, div, img, p, button, h1 {
 
 .panel_list {
     padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .vertical_centered {
@@ -177,9 +179,90 @@ a, div, img, p, button, h1 {
     margin: auto auto;
 }
 
+.center-vertically {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-hor {
+    text-align: center;
+}
+
 .question_num {
     background-color: rgb(243, 234, 196);
     padding: 10px;
     color: rgb(109, 82, 8);
     border-radius: 10px;
 }
+
+.poll_card {
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.poll_card td {
+    margin-right: 5px;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    justify-content: center;
+    color: rgb(148, 129, 77);
+}
+
+.poll_card table {
+    margin: auto auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.poll_card p {
+    font-size: 25px;
+    padding: 0px;
+    margin: 10px 0px;
+}
+
+.custom_answer div, input{
+    display: inline-block;
+}
+
+.custom_answer {
+    margin: auto;
+}
+
+.button_field {
+    font-size: 18px;
+    padding: 20px;
+    width: 100px;
+    height: 24px;
+    border-bottom-left-radius: 0ex;
+    border-top-left-radius: 0ex;
+}
+
+input {
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: groove;
+    background-color: rgb(240, 231, 197);
+    border: 3px solid rgb(253, 231, 141);
+    padding: 21px;
+    min-width: 200px;
+    text-decoration: none;
+}
+
+.dark {
+    background-color: rgb(243, 234, 196);
+}
+
+
+padding10 {
+    padding: 10px;
+}
+
+
