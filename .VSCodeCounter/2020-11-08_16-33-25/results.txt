@@ -1,0 +1,67 @@
+Date : 2020-11-08 16:33:25
+Directory : c:\Users\Artem\Documents\Project\LearnIT
+Total : 26 files,  19759 codes, 28 comments, 173 blanks, all 19960 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     18,726 |          0 |          2 |     18,728 |
+| JavaScript |         14 |        604 |         26 |        109 |        739 |
+| CSS        |          4 |        332 |          2 |         61 |        395 |
+| HTML       |          4 |         95 |          0 |          0 |         95 |
+| Markdown   |          1 |          2 |          0 |          1 |          3 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                 | files      | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                    |         26 |     19,759 |         28 |        173 |     19,960 |
+| build                                                                                                |         10 |         96 |         22 |          7 |        125 |
+| build\static                                                                                         |          5 |          5 |          5 |          0 |         10 |
+| build\static\css                                                                                     |          2 |          2 |          2 |          0 |          4 |
+| build\static\js                                                                                      |          3 |          3 |          3 |          0 |          6 |
+| public                                                                                               |          2 |         56 |          0 |          0 |         56 |
+| src                                                                                                  |         11 |        894 |          6 |        163 |      1,063 |
+| src\css                                                                                              |          2 |        330 |          0 |         61 |        391 |
+| src\js                                                                                               |          7 |        502 |          6 |         87 |        595 |
+| src\js\components                                                                                    |          1 |         50 |          0 |         12 |         62 |
+| src\js\panels                                                                                        |          4 |        438 |          4 |         70 |        512 |
+| src\js\panels\home                                                                                   |          2 |        243 |          4 |         35 |        282 |
+| src\js\panels\more                                                                                   |          2 |        195 |          0 |         35 |        230 |
+| src\js\services                                                                                      |          2 |         14 |          2 |          5 |         21 |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                             | language   | code       | comment    | blank      | total      |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\Artem\Documents\Project\LearnIT\README.md                                                   | Markdown   |          2 |          0 |          1 |          3 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\asset-manifest.json                                   | JSON       |         15 |          0 |          0 |         15 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\home.html                                             | HTML       |         38 |          0 |          0 |         38 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\index.html                                            | HTML       |          1 |          0 |          0 |          1 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\precache-manifest.235954b715b509aee62df9cc55aa4c45.js | JavaScript |         26 |          0 |          0 |         26 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\service-worker.js                                     | JavaScript |         11 |         17 |          7 |         35 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\static\css\2.90456dce.chunk.css                       | CSS        |          1 |          1 |          0 |          2 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\static\css\main.e193d6e2.chunk.css                    | CSS        |          1 |          1 |          0 |          2 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\static\js\2.339374bd.chunk.js                         | JavaScript |          1 |          1 |          0 |          2 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\static\js\main.aff91d78.chunk.js                      | JavaScript |          1 |          1 |          0 |          2 |
+| c:\Users\Artem\Documents\Project\LearnIT\build\static\js\runtime~main.a8a9905a.js                    | JavaScript |          1 |          1 |          0 |          2 |
+| c:\Users\Artem\Documents\Project\LearnIT\package-lock.json                                           | JSON       |     18,670 |          0 |          1 |     18,671 |
+| c:\Users\Artem\Documents\Project\LearnIT\package.json                                                | JSON       |         41 |          0 |          1 |         42 |
+| c:\Users\Artem\Documents\Project\LearnIT\public\home.html                                            | HTML       |         38 |          0 |          0 |         38 |
+| c:\Users\Artem\Documents\Project\LearnIT\public\index.html                                           | HTML       |         18 |          0 |          0 |         18 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\App.js                                                  | JavaScript |         51 |          0 |         11 |         62 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\css\components.css                                      | CSS        |          3 |          0 |          0 |          3 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\css\main.css                                            | CSS        |        327 |          0 |         61 |        388 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\index.js                                                | JavaScript |         11 |          0 |          4 |         15 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\components\Question.js                               | JavaScript |         50 |          0 |         12 |         62 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\panels\home\home.js                                  | JavaScript |         33 |          3 |          4 |         40 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\panels\home\test.js                                  | JavaScript |        210 |          1 |         31 |        242 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\panels\more\base.js                                  | JavaScript |         93 |          0 |         17 |        110 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\panels\more\example.js                               | JavaScript |        102 |          0 |         18 |        120 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\services\ApiController.js                            | JavaScript |          7 |          0 |          2 |          9 |
+| c:\Users\Artem\Documents\Project\LearnIT\src\js\services\VK.js                                       | JavaScript |          7 |          2 |          3 |         12 |
+| Total                                                                                                |            |     19,759 |         28 |        173 |     19,960 |
++------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
