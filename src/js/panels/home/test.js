@@ -1,16 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import Question from '../../components/Question'
 
-import {closePopout, goBack, openModal, openPopout, setPage} from '../../store/router/actions';
 import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
 
-const API_URL = "https://server.abbysoft.org:433"
+const API_URL = "https://192.168.1.7:433"
 
-class HomePanelBase extends React.Component {
+export default class Test extends React.Component {
 
     nextButton = null;
+
+    componentDidMount() {
+        this.startTest(this.props.level)
+    }
 
     state = {
         showImg: false,
@@ -18,7 +20,7 @@ class HomePanelBase extends React.Component {
         currentQuestionIndex: 0,
         questionCount: 10,
         correctAnswers: 0,
-        currentState: "menu",
+        currentState: "performingTest",
         time: 10,
         answered: false,
     };
@@ -81,7 +83,7 @@ class HomePanelBase extends React.Component {
     }
 
     getCurrentContent(state) {
-        console.log(this.state.question)
+        console.log("questions: " + this.state.questions)
         switch (state) {
             case "menu":
                 return this.getMenuContent()
@@ -100,16 +102,11 @@ class HomePanelBase extends React.Component {
         const {id, setPage, withoutEpic} = this.props
         const content = this.getCurrentContent(this.state.currentState)
 
-        return (
-            <Panel id={id}>
-                <PanelHeader>LearnIT <small className="beta">beta</small></PanelHeader>
-                <Group>
-                    <Div alignY="center">
-                        {content}
-                    </Div>
-                </Group>
-            </Panel>
-        );
+        return(
+            <div className="contrast_block" style={{display: 'flex', justifyContent: 'center', backgroundColor: "rgb(55, 55, 122)"}}>
+                {content}
+            </div>
+        )
     }
 
     getMenuContent() {
@@ -136,6 +133,7 @@ class HomePanelBase extends React.Component {
     }
 
     loadRandomQuestions(level) {
+        console.log("load questions " + level)
         axios.get(API_URL + "/question/random?level=" + level + "&" + "count=20").then(res => this.setState({
             questions: res.data,
             questionCount: res.data.length,
@@ -145,38 +143,42 @@ class HomePanelBase extends React.Component {
     getSummaryContent() {
         const correctPercentage = Math.round((this.state.correctAnswers * 1.0 / this.state.questions.length * 1.0) * 100);
         return (
-            <div>
-                <div className="panel_lighter panel poll_card" style={{marginBottom: "10px"}}>
-                    <p>Следите за новостями в группе VK</p>
+            <div style={{marginTop: "20px", backgroundColor: "rgb(55, 55, 122)"}}>
+                <div className="panel" style={{marginBottom: "10px"}}>
+                    <h2>Следите за новостями в группе VK</h2>
                     <div className="center-vertically">
                         <a style={{marginRight: "10px"}} href="https://vk.com/javatests">Перейти в группу</a>
                         <img width="50" src="https://leonardo.osnova.io/7e0ec5a0-1e56-2e90-de73-6c402276900d/-/resize/900"></img>
                     </div>
                 </div>
-                <div className="panel_lighter panel">
+                <div className="panel" style={{marginBottom: "10px"}}>
                     <h1>Тест завершен</h1>
                     <p>Результат: {correctPercentage} %</p>
                     <p>Количество верных ответов: {this.state.correctAnswers}</p>
                 </div>
-                <div className="panel_lighter panel poll_card" style={{display: this.state.hidePoll ? 'none' : 'block' }}>
+                <div className="panel" style={{display: this.state.hidePoll ? 'none' : 'block', marginBottom: "10px"}}>
                         <div>
-                            <p>Что можно было бы улучшить в приложении?</p>
-                            <table className="answer_container">
+                            <h2>Что можно было бы улучшить в приложении?</h2>
+                            <table className="answer_container" style={{flexWrap: "wrap", justifyContent: "center"}}>
                                 {this.renderPollOption(0, "Больше вопросов")}
                                 {this.renderPollOption(1, "Результат по областям Java")}
                                 {this.renderPollOption(2, "Тестовые задания с оценкой")}
-                                <td className="answer_card dark" style={{display: this.state.customPollAnswer ? 'none' : 'block' }} onClick={() => this.customPollAnswer()}>Другое</td>
+                                <td className="poll_option" style={{display: this.state.customPollAnswer ? 'none' : 'inherit' }} onClick={() => this.customPollAnswer()}>Другое</td>
                                 <div className="custom_answer" style={{display: this.state.customPollAnswer ? 'block' : 'none' }}>
                                     <input type="text" classname="textField"
-                                    placeholder="Отзывы и пожелания" onChange={(event) => this.setState({customPollAnswer: event.target.value})}/>
+                                    placeholder="Отзывы и пожелания" onChange={(event) => this.setState({customPollAnswer: event.target.value + " "})}/>
                                     <div className="button button_field" onClick={() => this.customPollAnswerReceived()}>Отправить</div>
                                 </div>
                             </table>
                         </div>
                 </div>
-                <div className="button" onClick={() => this.setState({currentState: "menu"})}>Пройти снова</div>
+                <div className="button" onClick={() => this.openHomepage()}>Пройти снова</div>
             </div>
         )
+    }
+
+    openHomepage() {
+        window.location.href = "/learnit"
     }
 
     renderPollOption(index, text) {
@@ -190,11 +192,15 @@ class HomePanelBase extends React.Component {
         }
 
         return (
-            <td className="answer_card dark" style={style} onClick={() => this.onPollAnswered(index)}>{text}</td>
+            <td className="poll_option" style={style} onClick={() => this.onPollAnswered(index)}>{text}</td>
         );
     }
 
     customPollAnswerReceived() {
+        console.log("custom: " + this.state.customPollAnswer)
+        if (this.state.customPollAnswer == "") {
+            return
+        }
         this.onPollAnswered(this.state.customPollAnswer)
         this.setState({pollAnswered: true, hidePoll: true})
         alert("Спасибо, Вы нам очень помогли!")
@@ -213,7 +219,7 @@ class HomePanelBase extends React.Component {
 
     getQuestionComponent() {
         return (
-            <div>
+            <div style={{backgroundColor: "rgb(55, 55, 122)"}}>
                 <div>
                     <div className="current_question">
                         <div className="time_circle">{this.state.time}</div>
@@ -229,17 +235,7 @@ class HomePanelBase extends React.Component {
      }
 
     getLoadingContent() {
-        return <div className="loadingContainer"><h1>Loading</h1></div>
+        return <div className="loadingContainer" style={{color: "white", fontWeight: "300"}}><h1>Loading</h1></div>
     }
 
 }
-
-const mapDispatchToProps = {
-    setPage,
-    goBack,
-    openPopout,
-    closePopout,
-    openModal
-};
-
-export default connect(null, mapDispatchToProps)(HomePanelBase);

@@ -14,11 +14,11 @@ class Question extends React.Component {
         }
 
         return (
-            <div>
-                <div className="panel panel_list">
-                    <p className="panel_title">{this.props.question.text}</p>
+            <div style={{width: "85%", margin: "auto auto"}}>
+                <h1 style={{color: "white"}}>{this.props.question.text}</h1>
+                <ul className="level-chooser">
                     {answers.map((answer, index) => this.renderAnswer(answer, index))}
-                </div>
+                </ul>
             </div>);
     }
 
@@ -31,16 +31,14 @@ class Question extends React.Component {
     }
 
     renderAnswer(answer, index) {
-        const cardClass = (this.state.givenAnswerId !== index || this.state.correctAnswered == null) ? "answer_card" 
+        const cardClass = (this.state.givenAnswerId !== index || this.state.correctAnswered == null) ? "menu_item" 
         : this.state.correctAnswered ? "answer_card_correct" : "answer_card_wrong"
 
         return (
-        <div className={cardClass} key={index} onClick={this.answerReceived.bind(this, index)}>
-            <div className="answer_container">
-                <a className="answer_number">{index + 1}.</a>
-                <a className="answer_text">{answer}</a>
-            </div>
-        </div>
+        <p className={cardClass} key={index} onClick={this.answerReceived.bind(this, index)}>
+            <a className="answer_number">{index + 1}.</a>
+            <a className="answer_text">{answer}</a>
+        </p>
         )
     }
 
