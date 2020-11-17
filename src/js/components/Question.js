@@ -4,7 +4,7 @@ class Question extends React.Component {
 
     state = {
         givenAnswerId: null,
-        lastQuestion: null
+        lastQuestion: null,
     }
 
     render() {
@@ -26,13 +26,12 @@ class Question extends React.Component {
         this.state = ({
             givenAnswerId: null,
             correctAnswered: null,
-            lastQuestion: this.props.question.id
+            lastQuestion: this.props.question.id,
         })
     }
 
     renderAnswer(answer, index) {
-        const cardClass = (this.state.givenAnswerId !== index || this.state.correctAnswered == null) ? "menu_item" 
-        : this.state.correctAnswered ? "answer_card_correct" : "answer_card_wrong"
+        var cardClass = this.getCardClassBasedOnAnswer(index)
 
         return (
         <p className={cardClass} key={index} onClick={this.answerReceived.bind(this, index)}>
@@ -40,6 +39,24 @@ class Question extends React.Component {
             <a className="answer_text">{answer}</a>
         </p>
         )
+    }
+    
+    getCardClassBasedOnAnswer(index) {
+        var cardClass = "menu_item"
+
+        console.log(this.state.givenAnswerId)
+        console.log("right one " + this.props.question.rightAnswer)
+
+        const answered = this.state.correctAnswered != null
+        if (answered) {
+            if (index == this.state.givenAnswerId) {
+                cardClass = this.props.question.rightAnswer == index ? "answer_card_correct" : "answer_card_wrong"
+            } else if (index == this.props.question.rightAnswer) {
+                cardClass = "answer_card_correct"
+            }
+        }
+
+        return cardClass
     }
 
     async answerReceived(index) {

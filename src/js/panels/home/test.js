@@ -4,7 +4,7 @@ import Question from '../../components/Question'
 import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
 
-const API_URL = "https://192.168.1.7:433"
+const API_URL = "https://server.abbysoft.org:433"
 
 export default class Test extends React.Component {
 
