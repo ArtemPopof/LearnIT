@@ -7,6 +7,12 @@ export default class Home extends React.Component {
             <div>
                <header className="header">
                <h3><a href="https://abbysoft.org">AbbySoft | <small>Подготовка к собеседованию Java</small></a></h3>
+                <div id="header_menu">
+                    <div id="menu_sign_block">
+                        <a href="/register">Регистрация</a>
+                        <a href="/sign_in">Вход</a>
+                    </div>
+                </div>
                </header>
                <div className="flex">
                    {/* <div style={{width:"80%", backgroundColor: "white", paddingTop: "150px", paddingLeft: "90px", paddingRight: "50px"}}>

@@ -350,7 +350,9 @@ a {
 .header h3 {
     font-weight: 200;
     font-size: 20px;
+    display: inline-block;
     padding: 0px 25px;
+    flex: 1;
     width: 200px;
 }
 
@@ -385,4 +387,16 @@ a {
 
 #root {
     background-color: rgb(55, 55, 122);
+}
+
+
+
+#header_menu {
+    text-align: right;
+    flex: 4;
+    padding-right: 16px;
+}
+
+#menu_sign_block a {
+    padding-right: 10px;
 }

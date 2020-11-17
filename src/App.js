@@ -4,6 +4,7 @@ import * as VK from './js/services/VK';
 
 import Home from './js/panels/home/home'
 import Test from './js/panels/home/test'
+import LoginScreen from './js/screens/login'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -36,6 +37,15 @@ export default class App extends React.Component {
 
     render() {
         var screen
+        
+        var page = document.location.href.split("/")[3]
+        if (page == "sign_in") {
+            return (<LoginScreen newAccount={false}/>);
+        }
+        if (page == "register") {
+            return (<LoginScreen newAccount={true}/>);
+        }
+
         switch (this.state.screen) {
             case "home":
                 screen = <Home onStartTest={(level) => this.startTest(level)}/>
