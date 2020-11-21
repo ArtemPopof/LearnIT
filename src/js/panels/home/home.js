@@ -1,19 +1,12 @@
 import React from 'react';
+import MainHeader from '../../components/Header';
 
 export default class Home extends React.Component {
 
     render() {
         return (
             <div>
-               <header className="header">
-               <h3><a href="https://abbysoft.org">AbbySoft | <small>Подготовка к собеседованию Java</small></a></h3>
-                <div id="header_menu">
-                    <div id="menu_sign_block">
-                        <a href="/register">Регистрация</a>
-                        <a href="/sign_in">Вход</a>
-                    </div>
-                </div>
-               </header>
+                <MainHeader/>
                <div className="flex">
                    {/* <div style={{width:"80%", backgroundColor: "white", paddingTop: "150px", paddingLeft: "90px", paddingRight: "50px"}}>
                        <h1 style={{color: "rgb(55, 55, 122)"}}>LearnIT!</h1>

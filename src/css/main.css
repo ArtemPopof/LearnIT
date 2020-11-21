@@ -400,3 +400,39 @@ a {
 #menu_sign_block a {
     padding-right: 10px;
 }
+
+.label_header {
+    color: white;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.label_subheader {
+    color: rgba(255, 248, 248, 0.486);
+    font-weight: 200;
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.content {
+    padding-top: 70px;
+    height: 100%;
+}
+
+.card {
+    background: rgba(0,0,0,.14);
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    color: white;
+    padding: 2rem;
+    box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    width: 30%;
+}
+
+.center-hor-content {
+    margin: auto;
+}
+
+.learnit-button {
+    width: 200px;
+    font-size: 25px;
+}
