@@ -15,7 +15,11 @@ export default class MainHeader extends React.Component {
 
     renderRegistrationMenu() {
         if (this.props.hostScreen == "login") {
-            return (<div></div>);
+            return (            
+                <div id="menu_sign_block">
+                    <a href="/">На главную</a>
+                </div>
+            );
         }                   
         
         return (
