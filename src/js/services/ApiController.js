@@ -1,13 +1,17 @@
-class Api {
-    API_URL = "https://server.abbysoft.org:433"
 
-    getRandomQuestion() {
-        return fetch(this.API_URL + '/question/random').then(res => res.json())
-    }
 
-    getURL() {
-        return this.API_URL;
-    }
-}
+// class Api {
+//     getRandomQuestion() {
+//         return fetch(API_URL + '/question/random').then(res => res.json())
+//     }
 
-export default Api;
+//     getURL() {
+//         return API_URL;
+//     }
+//     
+
+// }
+
+// export default Api;
+
+export const API_URL = "https://localhost:8080";

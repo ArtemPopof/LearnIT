@@ -3,8 +3,7 @@ import Question from '../../components/Question'
 
 import axios from 'axios'
 import {Div, Panel, Alert, Group, Button, PanelHeader} from "@vkontakte/vkui"
-
-const API_URL = "https://server.abbysoft.org:433"
+import * as API from '../../services/ApiController'
 
 export default class Test extends React.Component {
 
@@ -134,7 +133,7 @@ export default class Test extends React.Component {
 
     loadRandomQuestions(level) {
         console.log("load questions " + level)
-        axios.get(API_URL + "/question/random?level=" + level + "&" + "count=20").then(res => this.setState({
+        axios.get(API.API_URL + "/question/random?level=" + level + "&" + "count=20").then(res => this.setState({
             questions: res.data,
             questionCount: res.data.length,
         }))
@@ -210,7 +209,7 @@ export default class Test extends React.Component {
     onPollAnswered(answer) {
         console.log("poll answer " + answer)
         this.setState({pollAnswer: answer})
-        axios.post(API_URL + "/question/answer?question=" + 1000 + "&" + "answer=" + answer).catch((error) => console.error(error))
+        axios.post(API.API_URL + "/question/answer?question=" + 1000 + "&" + "answer=" + answer).catch((error) => console.error(error))
     }
 
     customPollAnswer() {
