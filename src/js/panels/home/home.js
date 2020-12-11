@@ -1,6 +1,8 @@
 import React from 'react';
 import MainHeader from '../../components/Header';
 
+import cookie from 'js-cookie';
+
 export default class Home extends React.Component {
 
     render() {
@@ -27,9 +29,7 @@ export default class Home extends React.Component {
                                 </div>
                                 <div className="gap40"></div>
                                 <div className="half-column card" style={{position: "relative"}}>
-                                    <div className="locked center-hor center-vertically padding36 clickable" onClick={() => document.location.href="/sign_in"}>
-                                        <h1>Войдите или зарегистрируйтесь для доступа к этому разделу</h1>
-                                    </div>
+                                    {this.lockIfNotSignedIn()}
                                     <h1>Задания с кодом</h1>
                                     <ul className="level-chooser" style={{textAlign: "center"}}>
                                         <p className="menu_item" onClick={this.startTest.bind(this, "junior")}>Простые задания (core java)</p>
@@ -48,6 +48,15 @@ export default class Home extends React.Component {
         );
     }
 
+    lockIfNotSignedIn() {
+        if (cookie.get('token')) return
+        
+        return (
+            <div className="locked center-hor center-vertically padding36 clickable" onClick={() => document.location.href="/sign_in"}>
+                <h1>Войдите или зарегистрируйтесь для доступа к этому разделу</h1>
+            </div>
+        )
+    }
     
     startTest(level) {        
         this.props.onStartTest(level)

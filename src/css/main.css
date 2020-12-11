@@ -480,3 +480,7 @@ delimiter::before {
 delimiter {
     margin: 0 20px;
 }
+
+.clickable:hover {
+    cursor: pointer;
+}

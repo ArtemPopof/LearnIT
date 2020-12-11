@@ -4,6 +4,7 @@ import { Button } from 'primereact/button';
 
 import * as Api from '../services/ApiController';
 import axios from 'axios';
+import cookie from 'js-cookie';
 
 export default class LoginScreen extends React.Component {
 
@@ -173,7 +174,10 @@ export default class LoginScreen extends React.Component {
                     username: userValue
                 }
             }).then(function (response) {
-                document.location.href = "/profile"
+                cookie.set('token', response.data.token, { expires: 3600000 })
+                cookie.set('user', response.data.username, { expires: 3600000 }) 
+                console.log(cookie.get('token'))
+                document.location.href = "/"
             }).catch(function (response) {
                 console.log("register request error")
                 console.log(response)
