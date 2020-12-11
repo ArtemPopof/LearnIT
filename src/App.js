@@ -8,6 +8,7 @@ import Test from './js/panels/home/test'
 import LoginScreen from './js/screens/login'
 import AdminScreen from './js/screens/admin'
 import ProfileScreen from './js/screens/profile'
+import CodeTaskScreen from './js/screens/code.js'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -53,6 +54,11 @@ export default class App extends React.Component {
         }
         if (page == "profile") {
             return (<ProfileScreen/>)
+        }
+        if (page.startsWith("code_task")) {
+            var level = page.substring(16)
+            console.log(level)
+            return (<CodeTaskScreen level={level}/>)
         }
 
         switch (this.state.screen) {

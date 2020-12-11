@@ -19,7 +19,7 @@ export default class Home extends React.Component {
                        <div className="center-hor" style={{marginTop: '100px'}}>
                             <h1 style={{marginBottom: "50px"}}>Тесты и задания для подготовки к собеседованию и изучению Java</h1>
                             <div className="flex">
-                                <div className="half-column card">
+                                <div className="half-column lcard">
                                     <h1>Тестирование</h1>
                                     <ul className="level-chooser" style={{textAlign: "center"}}>
                                         <p className="menu_item" onClick={this.startTest.bind(this, "junior")}>Начинающий уровень (Junior)</p>
@@ -28,13 +28,13 @@ export default class Home extends React.Component {
                                     </ul>
                                 </div>
                                 <div className="gap40"></div>
-                                <div className="half-column card" style={{position: "relative"}}>
+                                <div className="half-column lcard" style={{position: "relative"}}>
                                     {this.lockIfNotSignedIn()}
                                     <h1>Задания с кодом</h1>
                                     <ul className="level-chooser" style={{textAlign: "center"}}>
-                                        <p className="menu_item" onClick={this.startTest.bind(this, "junior")}>Простые задания (core java)</p>
-                                        <p className="menu_item" onClick={this.startTest.bind(this, "middle")}>Средние задания (core + swing + fs)</p>
-                                        <p className="menu_item" onClick={this.startTest.bind(this, "senior")}>Сложные задания (threads, network)</p>
+                                        <p className="menu_item" onClick={() => document.location.href="/code_task?level=easy"}>Простые задания (core java)</p>
+                                        <p className="menu_item" onClick={() => document.location.href="/code_task?level=middle"}>Средние задания (core + swing + fs)</p>
+                                        <p className="menu_item" onClick={() => document.location.href="/code_task?level=hard"}>Сложные задания (threads, network)</p>
                                     </ul>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@ export default class Home extends React.Component {
 
     lockIfNotSignedIn() {
         if (cookie.get('token')) return
-        
+
         return (
             <div className="locked center-hor center-vertically padding36 clickable" onClick={() => document.location.href="/sign_in"}>
                 <h1>Войдите или зарегистрируйтесь для доступа к этому разделу</h1>

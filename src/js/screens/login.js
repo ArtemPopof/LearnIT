@@ -33,7 +33,7 @@ export default class LoginScreen extends React.Component {
                     <h1 className="label_header center-hor">Регистрация</h1>
                     <h2 className="label_subheader center-hor">Получи больше возможностей тестирования после регистрации</h2>
                     <br></br>
-                    <div className="card center-hor-content center-hor">
+                    <div className="lcard center-hor-content center-hor">
                         <small id="error" className="p-invalid p-d-block">{this.state.validationError}</small>
                         <h3 className="label_header">Имя пользователя</h3>
                         <span className="p-input-icon-left">
@@ -62,7 +62,7 @@ export default class LoginScreen extends React.Component {
             <div>
                 <MainHeader hostScreen="login"/>
                 <div className="content center-hor">
-                    <div className="card center-hor" style={{margin: "auto", marginTop: "120px"}}>
+                    <div className="lcard center-hor" style={{margin: "auto", marginTop: "120px"}}>
                         <h1 className="label_header center-hor">Регистрация</h1>
                         <h2 className="label_subheader center-hor">Регистрация прошла успешно, войдите используя форму логина</h2>
                         <Button type="submit" onClick={() => document.location.href="/sign_in"} label="Готово" className="button p-button-success" style={{marginTop: "35px"}}/>
@@ -87,7 +87,7 @@ export default class LoginScreen extends React.Component {
                     <h1 className="label_header center-hor">Вход</h1>
                     <h2 className="label_subheader center-hor">Доступ к проверке заданий</h2>
                     <br></br>
-                    <div className="card center-hor-content center-hor">
+                    <div className="lcard center-hor-content center-hor">
                         <h3 className="label_header">Имя пользователя</h3>
                         <span className="p-input-icon-left">
                             <i className="pi pi-user"/>
