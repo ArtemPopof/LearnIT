@@ -22,6 +22,9 @@ export default class LoginScreen extends React.Component {
     }
 
     renderRegistrationPage() {
+        console.log("render")
+        console.log(this.state)
+        if (this.state.registrationComplete == true) return this.registrationCompleteScreen()
         return (
             <div>
                 <MainHeader hostScreen="login"/>
@@ -30,22 +33,49 @@ export default class LoginScreen extends React.Component {
                     <h2 className="label_subheader center-hor">Получи больше возможностей тестирования после регистрации</h2>
                     <br></br>
                     <div className="card center-hor-content center-hor">
+                        <small id="error" className="p-invalid p-d-block">{this.state.validationError}</small>
                         <h3 className="label_header">Имя пользователя</h3>
                         <span className="p-input-icon-left">
                         <i className="pi pi-user" />
-                            <input id="user" type="text" name="username" placeholder="Введите имя" className="p-inputtext p-component" style={{width: "200px"}}/>
+                            <input id="user" type="text" name="username" placeholder="Введите имя" className={this.getInputClass("user")} style={{width: "200px"}}/>
                         </span>
                         <h3 className="label_header">Пароль</h3>
-                        <input id="password" type="password" name="password" placeholder="Введите пароль" className="p-inputtext p-component"/>
+                        <input id="password" type="password" name="password" placeholder="Введите пароль" className={this.getInputClass("password")}/>
                         <h3 className="label_header">Email</h3>
                             {this.renderEmailField()}
                         <br/>
-                        <Button type="submit" onClick={() => this.register()} label="Готово" className="button p-button-success" style={{marginTop: "70px"}}/>
+                        <Button type="submit" onClick={() => this.register()} label="Готово" className="button p-button-success" style={{marginTop: "35px"}}/>
+                        <div style={{position: "relative", marginTop: "20px", marginBottom: "40px"}}>
+                            <delimiter> </delimiter>
+                        </div>
+                        <Button onClick={() => document.location.href="/sign_in"} label="Уже есть аккаунт" className="button p-button-warning"/>
                     </div>
                 </div>
             </div>
             
         );
+    }
+
+    registrationCompleteScreen() {
+        return (
+            <div>
+                <MainHeader hostScreen="login"/>
+                <div className="content center-hor">
+                    <div className="card center-hor" style={{margin: "auto", marginTop: "120px"}}>
+                        <h1 className="label_header center-hor">Регистрация</h1>
+                        <h2 className="label_subheader center-hor">Регистрация прошла успешно, войдите используя форму логина</h2>
+                        <Button type="submit" onClick={() => document.location.href="/sign_in"} label="Готово" className="button p-button-success" style={{marginTop: "35px"}}/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    
+    getInputClass(error) {
+        if (this.state.invalidField != error) return "p-inputtext p-component"
+        else {
+            return "p-invalid p-inputtext p-component"
+        }
     }
 
     renderLoginPage() {
@@ -56,18 +86,21 @@ export default class LoginScreen extends React.Component {
                     <h1 className="label_header center-hor">Вход</h1>
                     <h2 className="label_subheader center-hor">Доступ к проверке заданий</h2>
                     <br></br>
-                    <form method="POST" className="card center-hor-content center-hor">
-                        <h3 className="label_header">Email</h3>
+                    <div className="card center-hor-content center-hor">
+                        <h3 className="label_header">Имя пользователя</h3>
                         <span className="p-input-icon-left">
                             <i className="pi pi-user"/>
-                            {this.renderEmailField()}
+                            <input id="user" type="text" name="username" placeholder="Введите имя" className={this.getInputClass("user")} style={{width: "200px"}}/>
                         </span>
-                        {this.state.emailInvalid ? <div className="p-invalid">Email не корректный</div> : null}
                         <h3 className="label_header">Пароль</h3>
-                        <input type="password" name="password" placeholder="Введите пароль" className="p-inputtext p-component"/>
+                        <input id="password" type="password" name="password" placeholder="Введите пароль" className="p-inputtext p-component"/>
                         <br/>
-                        <Button type="submit" onClick={() => this.validateFields()} label="Готово" className="button p-button-success" style={{marginTop: "70px"}}/>
-                    </form>
+                        <Button onClick={() => this.login()} label="Готово" className="button p-button-success" style={{marginTop: "40px"}}/>
+                        <div style={{position: "relative", marginTop: "20px", marginBottom: "40px"}}>
+                            <delimiter> </delimiter>
+                        </div>
+                        <Button onClick={() => document.location.href="/register"} label="Зарегистрироваться" className="button p-button-warning"/>
+                    </div>
                 </div>
             </div>
         );
@@ -77,8 +110,19 @@ export default class LoginScreen extends React.Component {
         var classes = this.state.emailInvalid == false ? "p-inputtext p-component" : "p-inputtext p-component p-invalid";
 
         return (
-            <input id="email" type="email" name="email" placeholder="Введите email" className={classes} style={{width: "200px"}}/>
+            <input id="email" type="email" name="email" placeholder="Введите email" className={this.getInputClass("email")} style={{width: "200px"}}/>
         );
+    }
+    
+    login() {
+        this.validateFields()
+        
+        console.log("login request")
+        
+        var user = document.getElementById('user').value
+        var password = document.getElementById('password').value
+        
+        this.sendLoginRequest(user, password)
     }
     
     register() {
@@ -97,20 +141,46 @@ export default class LoginScreen extends React.Component {
             axios({
                 method: 'post',
                 url: Api.API_URL + '/user/register',
-                data: {
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                data:JSON.stringify({
                     user: userValue,
                     password: passwordValue,
                     email: emailValue
+                })
+            }).then(response => {
+                console.log("registered")
+                this.setState({registrationComplete: true})
+            }
+            ).catch(response => {
+                console.log("error")
+                console.log(response)
+                if (response.response == undefined) return;
+                console.log(response.response.data)
+                this.setState({invalidField: response.response.data.field, validationError: response.response.data.error})
+            }
+            );
+    }
+    
+    sendLoginRequest(userValue, passwordValue) {
+            axios({
+                method: 'post',
+                url: Api.API_URL + '/user/login',
+                data: {
+                    password: passwordValue,
+                    username: userValue
                 }
             }).then(function (response) {
-                return ""
+                document.location.href = "/profile"
             }).catch(function (response) {
                 console.log("register request error")
                 console.log(response)
                 return response
             });
     }
-
+    
     validateFields() {
         //this.validateEmail();
     }

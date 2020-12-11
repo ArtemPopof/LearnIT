@@ -4,7 +4,10 @@ import * as VK from './js/services/VK';
 
 import Home from './js/panels/home/home'
 import Test from './js/panels/home/test'
+
 import LoginScreen from './js/screens/login'
+import AdminScreen from './js/screens/admin'
+import ProfileScreen from './js/screens/profile'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -44,6 +47,12 @@ export default class App extends React.Component {
         }
         if (page == "register") {
             return (<LoginScreen newAccount={true}/>);
+        }
+        if (page == "admin") {
+            return (<AdminScreen/>)
+        }
+        if (page == "profile") {
+            return (<ProfileScreen/>)
         }
 
         switch (this.state.screen) {

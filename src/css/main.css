@@ -436,3 +436,47 @@ a {
     width: 200px;
     font-size: 25px;
 }
+
+.flex {
+    display: flex;
+}
+
+.half-column {
+    flex: 1;
+}
+
+.gap40 {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.locked {
+    background-color: #04000fa4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.locked:hover {
+    background-color: #04000f67;
+    cursor: pointer;
+}
+
+.padding36 {
+    padding: 36px;
+}
+
+delimiter::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: 1px rgba(255, 255, 255, 0.767) solid;
+}
+
+delimiter {
+    margin: 0 20px;
+}
