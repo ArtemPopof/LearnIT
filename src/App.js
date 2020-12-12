@@ -60,6 +60,12 @@ export default class App extends React.Component {
             console.log(level)
             return (<CodeTaskScreen level={level}/>)
         }
+        // if (page.startsWith("task_details")) {
+        //     var id = page.substring(16)
+        //     console.log("open task details")
+        //     console.log(id)
+        //     return (<CodeTaskDetailsScreen id={id}/>)
+        // }
 
         switch (this.state.screen) {
             case "home":
