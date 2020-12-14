@@ -10,11 +10,22 @@ import axios from 'axios';
 export default class CodeTaskScreen extends React.Component {
 
     state = {
-
+        reload: "true"
     }
 
-    componentDidMount() {
-        console.log("loading questions")
+    render() {
+        this.loadTasks()
+        if (this.state.state == "reload") {
+            this.setState({currentTask: this.state.currentTask, state: ""})
+            return <div></div>
+        }
+        if (this.state.currentTask == null) return this.renderTaskList()
+        if (this.state.state == "taskUploaded") return this.uploadCompleteMessage()
+        return this.renderTaskDetails()
+    }
+
+    loadTasks() {
+        console.log("loading tasks")
         axios({
             method: 'get',
             url: Api.API_URL + '/code/availableTasks?level=' + this.getLevel(),
@@ -33,12 +44,6 @@ export default class CodeTaskScreen extends React.Component {
             console.log(error)
             this.setState({taskLoadingError: error})
         });     
-     }
-
-    render() {
-        if (this.state.currentTask == null) return this.renderTaskList()
-        if (this.state.state == "taskUploaded") return this.uploadCompleteMessage()
-        return this.renderTaskDetails()
     }
 
     renderTaskDetails() {
@@ -54,34 +59,69 @@ export default class CodeTaskScreen extends React.Component {
                             <div className="lncard" style={{margin: "0"}}>
                                 <h3>Инструкции к выполнению</h3>
                                 <p style={{background: "rgba(255, 248, 248, 0.1)", padding: "24px", textAlign: "left"}}>{task.fullDescription}</p>
+                                <p style={{display: "none"}} id="taskId">{this.state.currentTask.id}</p>
                                 <h3>Навыки</h3>
                                 {task.areas.split(';').map((area) => this.renderArea(area))}
                                 <h3 style={{marginTop: "24px"}}>Загрузка файлов выполненого задания</h3>
                                 <p style={{fontSize: "18px", fontWeight: "200", color: "rgba(255, 248, 248, 0.486)"}}>Загрузите архив со всеми файлами выполненого задания. Проект должен содержать все файлы необходимые для компиляции и запуска выполненого задания (максимальный размер файла 1MB, допустимые форматы: .zip,.rar,.7z,.tar.gz,.java,.kt,.txt)</p>
-                                <FileUpload style={{marginTop: "25px"}} mode="basic" auto={true} customUpload uploadHandler={this.uploadFiles} chooseLabel="Выбрать" uploadLabel="Отправить" cancelLabel="Отменить" multiple accept=".zip,.rar,.7z,.tar.gz,.java,.kt,.txt" maxFileSize="1000000"></FileUpload>
+                                <p id="loadedFile"></p>
+                                <div id="fileInput">
+                                    <FileUpload style={{marginTop: "25px"}} mode="basic" auto={true} customUpload uploadHandler={this.uploadFiles} chooseLabel="Выбрать" uploadLabel="Отправить" cancelLabel="Отменить" multiple accept=".zip,.rar,.7z,.tar.gz,.java,.kt,.txt" maxFileSize={1000000}></FileUpload>
+                                </div>
+                                <Button id="resetFile" onClick={() => this.setState({state: "reload"})} label="Отменить" className="button" style={{width: "auto", display: "none"}}/>
                                 <br/>   
-                                <Button onClick={() => document.location.href="/"} label="Отправить на проверку" className="button p-button-warning" style={{width: "auto", marginTop: "40px"}}/>
+                                <Button id="submitFile" onClick={() => this.setState({state: "taskUploaded"})} label="Отправить на проверку" className="button p-button-warning" style={{width: "auto", marginTop: "40px", display: "none"}}/>
                             </div>
                         </div>
-                        <Button onClick={() => document.location.href="/"} label="К списку заданий" className="button" style={{marginTop: "100px", marginLeft: "30px"}}/>
+                        <Button onClick={() => document.location.reload()} label="К списку заданий" className="button" style={{marginTop: "100px", marginLeft: "30px"}}/>
                     </div>
                 </div>
             </div>
             )
     }
 
+    uploadTaskFile() {
+        var component = document.getElementById("ff")
+        console.log("component" + component)
+    }
+
     uploadFiles(event) {
         const [file] = event.files;
         const fileReader = new FileReader();
-        fileReader.onload = (e) => {
-            this.uploadTaskResult(e.target.result);
-        };
-        fileReader.readAsDataURL(file);
-    }
+        const taskId = document.getElementById("taskId").innerText;
 
-    uploadTaskResult(taskResult) {
-        console.log("SUCCESS")
-        this.setState({state: "taskUploaded"})
+        fileReader.onloadend = function (event) {
+            console.log(fileReader.result)
+            const formData = new FormData();
+            formData.append('file', fileReader.result)
+
+            axios({
+                method: 'post',
+                url: Api.API_URL + '/code/submit',
+                headers: {
+                    'Authorization': "Bearer " + cookie.get('token'),
+                    'Accept': 'application/json',
+                },
+                data: {
+                    base64: fileReader.result,
+                    fileName: file.name,
+                    taskId: taskId
+                }
+            }).then(response => {
+                console.log("submitted")
+                console.log(response.data)
+
+                document.getElementById("loadedFile").innerText = file.name
+                document.getElementById("fileInput").style.display = "none"
+                document.getElementById("resetFile").style.display = "inline-block"
+                document.getElementById("submitFile").style.display = "inline-block"
+            }
+            ).catch(error => {
+                console.log("error")
+                console.log(error)
+            });     
+        }
+        fileReader.readAsDataURL(file);
     }
 
     renderTaskList() {
@@ -105,7 +145,7 @@ export default class CodeTaskScreen extends React.Component {
     renderAllTasks() {
         if (this.state.taskLoadingError) return this.showError()
         if (this.state.tasks == null) return this.loadingMessage();
-        if (this.state.tasks.size == 0) return this.emptyListWarning(); 
+        if (this.state.tasks.length == 0) return this.emptyListWarning(); 
 
         return this.state.tasks.map((task) => this.renderTask(task))
     }
