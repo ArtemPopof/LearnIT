@@ -17,7 +17,8 @@ export default class Home extends React.Component {
                    </div> */}
                    <div className="contrast_block white_color" style={{width:"100%", height: "800px", boxShadow: "0 0 10px rgba(0,0,0,0.5)", backgroundColor: "rgb(55, 55, 122)", display: 'flex', justifyContent: 'center'}}>
                        <div className="center-hor" style={{marginTop: '100px'}}>
-                            <h1 style={{marginBottom: "50px"}}>Тесты и задания для подготовки к собеседованию и изучению Java</h1>
+                            <h1 >Тесты и задания для подготовки к собеседованию и изучению Java</h1>
+                            <h2 style={{marginBottom: "50px", fontSize: "24px"}} className="label_subheader center-hor">Задания проверяются менторами Middle+ - Senior, которые дают практические советы по улучшению навыков</h2>
                             <div className="flex">
                                 <div className="half-column lcard">
                                     <h1>Тестирование</h1>

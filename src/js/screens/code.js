@@ -19,8 +19,9 @@ export default class CodeTaskScreen extends React.Component {
             this.setState({currentTask: this.state.currentTask, state: ""})
             return <div></div>
         }
-        if (this.state.currentTask == null) return this.renderTaskList()
         if (this.state.state == "taskUploaded") return this.uploadCompleteMessage()
+        if (this.state.currentTask == null) return this.renderTaskList()
+        if (cookie.get('checks') <= 0) return this.renderPurchaseChecks()
         return this.renderTaskDetails()
     }
 
@@ -111,6 +112,9 @@ export default class CodeTaskScreen extends React.Component {
                 console.log("submitted")
                 console.log(response.data)
 
+                var checksCount = cookie.get('checks')
+                cookie.set('checks', --checksCount)
+
                 document.getElementById("loadedFile").innerText = file.name
                 document.getElementById("fileInput").style.display = "none"
                 document.getElementById("resetFile").style.display = "inline-block"
@@ -190,6 +194,7 @@ export default class CodeTaskScreen extends React.Component {
             </div>
         )
     }
+
     uploadCompleteMessage() {
         return (
             <div>
@@ -201,6 +206,24 @@ export default class CodeTaskScreen extends React.Component {
                                 <h1>Задание загружено и будет проверено в ближайшее время</h1>
                                 <p style={{fontSize: "18px", fontWeight: "200", color: "rgba(255, 248, 248, 0.486)"}}>Результаты проверки будут высланы на email, указанный при регистрации</p>
                                 <Button onClick={() => this.setState({currentTask: null, state: null})} label="К списку заданий" className="button" style={{marginTop: "100px", marginLeft: "30px"}}/>                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    renderPurchaseChecks() {
+        return (
+            <div>
+                <MainHeader/>
+                <div className="content center-hor" style={{padding: "80px"}}>
+                    <div className="center-hor-content">
+                        <div className="col-md-8" style={{marginTop: "25px", marginRight: "auto", marginLeft: "auto"}}>
+                            <div className="lncard" style={{margin: "0"}}>
+                                <h1>На балансе недостаточно платных проверок</h1>
+                                <p style={{fontSize: "18px", fontWeight: "200", color: "rgba(255, 248, 248, 0.486)"}}>Оплатите проверки через форму оплаты для того, чтобы отправить задание на проверку ментору</p>
+                                <Button onClick={() => document.location.href="/purchase"} label="К оплате" className="button" style={{marginTop: "100px", marginLeft: "30px"}}/>                            </div>
                         </div>
                     </div>
                 </div>

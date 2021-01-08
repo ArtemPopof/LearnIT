@@ -15,11 +15,86 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+        if (this.props.state == "confirmation") {
+            if (this.state.confirmationSuccessed) {
+                return this.renderConfirmationSuccess()
+            }
+            if (this.state.confirmationError) {
+                return this.renderErrorMessage()
+            }
+            this.sendConfirmation(this.props.email, this.props.secret)
+            return this.renderOngoingConfirmation()
+        }
+
         if (this.props.newAccount) {
             return this.renderRegistrationPage();
         } else {
             return this.renderLoginPage();
         }
+    }
+
+    sendConfirmation(email, secret) {
+        axios({
+            method: 'post',
+            url: Api.API_URL + '/user/confirm?' + 'email=' + email + '&secret=' + secret,
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              }
+        }).then(response => {
+            console.log("confirmed")
+            this.setState({confirmationSuccessed: true})
+        }
+        ).catch(error => {
+            console.log("error")
+            console.log(error)
+            this.setState({confirmationError: error})
+        }
+        );
+    }
+
+    renderErrorMessage(error) {
+        return (
+            <div>
+                <MainHeader hostScreen="login"/>
+                <div className="content center-hor">
+                    <div className="lcard center-hor" style={{margin: "auto", marginTop: "120px"}}>
+                        <h1 className="label_header center-hor">Ошибка</h1>
+                        <h2 className="label_subheader center-hor">Не удалось активировать аккаунт, попробуйте позже либо обратитесь в Поддержку по адресу сontact@abbysoft.org</h2>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+    renderConfirmationSuccess() {
+        return (
+            <div>
+                <MainHeader hostScreen="login"/>
+                <div className="content center-hor">
+                    <div className="lcard center-hor" style={{margin: "auto", marginTop: "120px"}}>
+                        <h1 className="label_header center-hor">Активация</h1>
+                        <h2 className="label_subheader center-hor">Аккаунт успешно активирован, теперь вам доступны закрытые материалы, а также 3 бесплатные проверки заданий ментором.</h2>
+                        <Button type="submit" onClick={() => document.location.href="/sign_in"} label="Войти" className="button p-button-success" style={{marginTop: "35px"}}/>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderOngoingConfirmation() {
+        return (
+            <div>
+                <MainHeader hostScreen="login"/>
+                <div className="content center-hor">
+                    <div className="lcard center-hor" style={{margin: "auto", marginTop: "120px"}}>
+                        <h1 className="label_header center-hor">Активация</h1>
+                        <h2 className="label_subheader center-hor">Подождите, идет активация аккаунта...</h2>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     renderRegistrationPage() {
@@ -64,7 +139,7 @@ export default class LoginScreen extends React.Component {
                 <div className="content center-hor">
                     <div className="lcard center-hor" style={{margin: "auto", marginTop: "120px"}}>
                         <h1 className="label_header center-hor">Регистрация</h1>
-                        <h2 className="label_subheader center-hor">Регистрация прошла успешно, войдите используя форму логина</h2>
+                        <h2 className="label_subheader center-hor">На указанный email была выслана инструкция по активации аккаунта. Перейдите по ссылке из письма для того, чтобы иметь возможность пользоваться возможностями сервиса</h2>
                         <Button type="submit" onClick={() => document.location.href="/sign_in"} label="Готово" className="button p-button-success" style={{marginTop: "35px"}}/>
                     </div>
                 </div>
@@ -88,6 +163,7 @@ export default class LoginScreen extends React.Component {
                     <h2 className="label_subheader center-hor">Доступ к проверке заданий</h2>
                     <br></br>
                     <div className="lcard center-hor-content center-hor">
+                        <small id="error" style={{fontSize: "24px"}}className="p-invalid p-d-block">{this.state.validationError}</small>
                         <h3 className="label_header">Имя пользователя</h3>
                         <span className="p-input-icon-left">
                             <i className="pi pi-user"/>
@@ -162,7 +238,7 @@ export default class LoginScreen extends React.Component {
                 console.log(response.response.data)
                 this.setState({invalidField: response.response.data.field, validationError: response.response.data.error})
             }
-            );
+        );
     }
     
     sendLoginRequest(userValue, passwordValue) {
@@ -176,12 +252,19 @@ export default class LoginScreen extends React.Component {
             }).then(function (response) {
                 cookie.set('token', response.data.token, { expires: 3600000 })
                 cookie.set('user', response.data.username, { expires: 3600000 }) 
+                cookie.set('checks', response.data.checks, { expires: 3600000 })
                 console.log(cookie.get('token'))
                 document.location.href = "/"
-            }).catch(function (response) {
-                console.log("register request error")
-                console.log(response)
-                return response
+            }).catch(response => {
+                console.log("login request error")
+                console.log(response.response)
+                if (response.response == null) {
+                    this.setState({validationError: "Ошибка соединения с сервером, обратитесь в поддержку"})
+                    return
+                }
+                if (response.response.data.error == "NOT_CONFIRMED") {
+                    this.setState({validationError: "Аккаунт необходимо активировать через email указанный при регистрации"})
+                }
             });
     }
     

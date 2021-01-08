@@ -9,6 +9,7 @@ import LoginScreen from './js/screens/login'
 import AdminScreen from './js/screens/admin'
 import ProfileScreen from './js/screens/profile'
 import CodeTaskScreen from './js/screens/code.js'
+import PurchaseScreen from './js/screens/purchase.js'
 
 export default class App extends React.Component {
     constructor(props) {
@@ -41,8 +42,9 @@ export default class App extends React.Component {
 
     render() {
         var screen
-        
+                
         var page = document.location.href.split("/")[3]
+
         if (page == "sign_in") {
             return (<LoginScreen newAccount={false}/>);
         }
@@ -60,6 +62,22 @@ export default class App extends React.Component {
             console.log(level)
             return (<CodeTaskScreen level={level}/>)
         }
+        if (page.startsWith("email_confirmation")) {
+            var secret = page.substring(26).split("&")[0]
+            var email = page.substring(26).split("&")[1].substring(6)
+            console.log(secret)
+            console.log(email)
+            return (<LoginScreen state="confirmation" email={email} secret={secret}/>)
+        }
+        if (page.startsWith("purchase")) {
+            return <PurchaseScreen/>
+        }
+        if (page.startsWith("success_purchase")) {
+            var checks = page.substring(24)
+            console.log("successfully purchased " + checks + " checks")
+            return (<PurchaseScreen state="successPayment" checks={checks}/>)
+        }
+
         // if (page.startsWith("task_details")) {
         //     var id = page.substring(16)
         //     console.log("open task details")
