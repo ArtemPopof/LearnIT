@@ -33,13 +33,13 @@ export default class PurchaseScreen extends React.Component {
                             <div className="col-md-6">
                                 <div style={{background: "#ffffff07", padding: "24px"}}>
                                     <h2 style={{marginBottom: "24px"}}>Перевод c Яндекс Кошелька</h2>
-                                    <iframe src={"https://yoomoney.ru/quickpay/button-widget?targets=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BE%D0%BA%20%D0%B2%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B5%20LearnIT&default-sum=" + this.state.sum + "&button-text=11&yoomoney-payment-type=on&button-size=l&button-color=orange&successURL=success_purchase" + this.state.checks + "&quickpay=small&account=4100116349347380&"} width="227" height="48" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-                                </div>
+                                    <iframe src={"https://yoomoney.ru/quickpay/button-widget?targets=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0%20%D0%BF%D0%BB%D0%B0%D1%82%D0%BD%D1%8B%D1%85%20%D1%83%D1%81%D0%BB%D1%83%D0%B3%20%D0%B2%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B5%20LearnIT&default-sum=" + this.state.sum + "&button-text=11&yoomoney-payment-type=on&button-size=l&button-color=orange&mail=on&successURL=https%3A%2F%2Fabbysoft.org%2Fsuccess_purchase" + this.state.checks + "&quickpay=small&account=4100116349347380&"} width="227" height="48" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                               </div>
                             </div>
                             <div className="col-md-6">
                                 <div style={{background: "#ffffff07", padding: "24px"}}>
                                     <h2 style={{marginBottom: "24px"}}>Перевод с банковской карты</h2>
-                                    <iframe src={"https://yoomoney.ru/quickpay/button-widget?targets=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BE%D0%BA%20%D0%B2%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B5%20LearnIT&default-sum=" + this.state.sum + "&button-text=11&any-card-payment-type=on&button-size=l&button-color=orange&successURL=success_purchase" + this.state.checks + "&quickpay=small&account=4100116349347380&"} width="227" height="48" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+                                    <iframe src={"https://yoomoney.ru/quickpay/button-widget?targets=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0%20%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BE%D0%BA%20%D0%B2%20%D1%81%D0%B5%D1%80%D0%B2%D0%B8%D1%81%D0%B5%20LearnIT&default-sum=" + this.state.sum + "&button-text=11&any-card-payment-type=on&button-size=l&button-color=orange&mail=on&successURL=success_purchase" + this.state.checks + "&quickpay=small&account=4100116349347380&"} width="227" height="48" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -50,6 +50,37 @@ export default class PurchaseScreen extends React.Component {
                     </div>
                 </div>
             </div>
+        );
+    }
+
+    proceedToPayment(amount, paidChecks) {
+        console.log("proceed to " + amount)
+        this.setState({state: "ongoingPayment", sum: amount, checks: paidChecks})
+        this.registerPayment(amount, paidChecks)
+    }
+
+    registerPayment(amount, paidChecks) {
+        axios({
+            method: 'post',
+            url: Api.API_URL + '/payment/purchase',
+              headers: {
+                'Authorization': "Bearer " + cookie.get('token'),
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+            data: {
+                checks: paidChecks,
+                sum: amount,
+            }
+        }).then(response => {
+            console.log("payment registered")
+            console.log(response)
+        }
+        ).catch(response => {
+            console.log("error")
+            console.log(response)
+            //this.setState({paymentError: "Возникла ошибка обработки, пожалуйста обратитесь в поддержку по адресу contact@abbysoft.org"})
+        }
         );
     }
 
@@ -80,7 +111,7 @@ export default class PurchaseScreen extends React.Component {
                         <small id="error" className="p-invalid p-d-block">{this.state.validationError}</small>
                         <div className="row">
                             <div className="col-md-4">
-                                <div onClick={() => this.setState({state: "ongoingPayment", sum: 290, checks: 10})} className="clickable-card lcard" style={{width: "100%", background: "#4caf508c"}}>
+                                <div onClick={() => this.proceedToPayment(290, 10)} className="clickable-card lcard" style={{width: "100%", background: "#4caf508c"}}>
                                     <h1>10 проверок</h1>
                                     <p className="label_subheader center-hor">Идеально для того, чтобы опробовать сервис</p>
                                     <br/>
@@ -89,7 +120,7 @@ export default class PurchaseScreen extends React.Component {
                                 </div>
                             </div>
                             <div className="col-md-4">
-                                <div onClick={() => this.setState({state: "ongoingPayment", sum: 790, checks: 30})} className="clickable-card lcard" style={{width: "100%", background: "rgb(241 216 0 / 60%)"}}>
+                                <div onClick={() => this.proceedToPayment(790, 30)} className="clickable-card lcard" style={{width: "100%", background: "rgb(241 216 0 / 60%)"}}>
                                     <h1>30 проверок</h1>
                                     <p className="label_subheader center-hor" style={{color: "#ffffffc4"}}>Хватит, чтобы получить множество дельных советов по повышению уровня</p>
                                     <br/>
@@ -99,7 +130,7 @@ export default class PurchaseScreen extends React.Component {
                                 </div>
                             </div>
                             <div className="col-md-4">
-                                <div onClick={() => this.setState({state: "ongoingPayment", sum: 1990, checks: 100})} className="clickable-card lcard" style={{width: "100%", background: "rgb(255 59 59 / 39%)"}}>
+                                <div onClick={() => this.proceedToPayment(1990, 100)} className="clickable-card lcard" style={{width: "100%", background: "rgb(255 59 59 / 39%)"}}>
                                     <h1>100 проверок + <small>первый доступ к новым функциям</small></h1>
                                     <p className="label_subheader center-hor">Достаточно для длительного использования сервиса. Подойдет тем, кто хочет серьезно повысить уровень.<br/> <br/>В дополнение к проверкам данная опция позволяет получить приоритетный доступ к новым функциям сервиса.</p>
                                     <h2>1990 руб / <span className="label_subheader" style={{fontSize: "24px"}}>~20₽ за проверку</span></h2>
@@ -110,7 +141,6 @@ export default class PurchaseScreen extends React.Component {
                     </div>
                 </div>
             </div>
-            
         );
     }
 
